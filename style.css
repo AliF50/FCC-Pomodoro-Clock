@@ -1,0 +1,14 @@
+body {
+    background-color: lightgrey;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.btn {
+    border-radius: 0;
+}
+
+input {
+    background-color: grey;
+    border-radius: 20px;
+    text-align: center;
+}

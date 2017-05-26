@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pomodoro Clock</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body ng-app="app" ng-controller="ClockController">
+    <div class="jumbotron">
+        <h1 class="text-center">Pomodoro Clock</h1>
+        <p class="text-center">A simple pomodoro clock. During break time, be sure to eat a Kit Kat.</p>
+        <div class="text-center">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success" ng-click="startWork(workTime)">Start</button>
+                <button type="button" class="btn btn-danger" ng-click="pause()">Pause</button>
+                <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6">
+                <label>Work Time
+                    <input type="number" ng-model="workTime">
+                </label>
+            </div>
+            <div class="col-xs-6">
+                <label>Break Time
+                    <input type="number" ng-model="breakTime">
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <h1 ng-show="showClock">{{workMinutes + ":" + workSeconds}}</h1>
+            </div>
+            <div class="col-xs-6">
+                <h1 ng-show="showClock">{{breakMinutes + ":" + breakSeconds}}</h1>
+            </div>
+        </div>
+    </div>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="app-module.js"></script>
+    <script src="app-controller.js"></script>
+</body>
+
+</html>
