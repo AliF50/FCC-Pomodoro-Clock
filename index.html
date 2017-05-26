@@ -12,14 +12,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body ng-app="app" ng-controller="ClockController">
+<body ng-app="app" ng-controller="ClockController" ng-cloak>
     <div class="jumbotron">
         <h1 class="text-center">Pomodoro Clock</h1>
         <p class="text-center">A simple pomodoro clock. During break time, be sure to eat a Kit Kat.</p>
+        <p class="text-center">Feel free to alter the times in minutes. </p>
         <div class="text-center">
             <div class="btn-group">
                 <button type="button" class="btn btn-success" ng-click="startWork(workTime)">Start</button>
-                <button type="button" class="btn btn-danger" ng-click="pause()">Pause</button>
                 <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
             </div>
         </div>
