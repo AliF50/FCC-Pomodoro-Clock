@@ -3,16 +3,17 @@ app.controller('ClockController', ['$scope', function($scope) {
     var defaultBreakTime = 5;
     $scope.workTime = defaultWorkTime; //set to default initially
     $scope.breakTime = defaultBreakTime;
-
     $scope.workMinutes = 0; //make 0's appear so something appears at least
-    $scope.workSeconds = "00";
+    $scope.workSeconds = "00"; //Double 0's for formatting
     $scope.breakMinutes = 0;
     $scope.breakSeconds = "00";
     $scope.showClock = false;
-    var x;
-    var firstTimeRunning = true;
-    var initialWorkTime, initialBreakTime;
+    $scope.showWork = false;
+    $scope.showBreak = false;
+
+    var x; //global time interval to be able to be cleared everywhere
     var pause = false;
+    var initialWorkTime, initialBreakTime, firstTimeRunning = true;
 
     $scope.reset = function() {
         $scope.workTime = defaultWorkTime; //reset everything to original state
@@ -22,21 +23,25 @@ app.controller('ClockController', ['$scope', function($scope) {
         $scope.breakMinutes = 0;
         $scope.breakSeconds = "00";
         $scope.showClock = false;
-        firstTimeRunning = true;
+        $scope.showWork = false;
+        $scope.showBreak = false;
         clearInterval(x);
     };
 
     $scope.pause = function() {
         clearInterval(x);
-        pause = true;
-        console.log($scope.workMinutes + " " + $scope.workSeconds + " " + $scope.breakMinutes + " " + $scope.breakSeconds);
-        if (($scope.workMinutes >= 0 && $scope.workSeconds >= 0)) {
+        //pause = true;
+        var workTimeLeft = $scope.workMinutes + $scope.workSeconds / 60;
+        var breakTimeLeft = $scope.breakMinutes + $scope.breakSeconds / 60;
+        console.log(workTimeLeft + " " + breakTimeLeft);
+        console.log()
+        if (workTimeLeft > 0) {
             $scope.workTime = $scope.workMinutes + $scope.workSeconds / 60;
-        }
-        if (($scope.breakMinutes >= 0 && $scope.breakSeconds >= 0)) {
+        } else {
             $scope.breakTime = $scope.breakMinutes + $scope.breakSeconds / 60;
+            $scope.workTime = 0; //initialize to 0 so it goes straight to startBreak()
         }
-        console.log($scope.workTime + " " + $scope.breakTime);
+
     };
 
     $scope.startWork = function(time) {
@@ -44,17 +49,20 @@ app.controller('ClockController', ['$scope', function($scope) {
         var countDownTime = new Date().getTime() +
             time * 1000 * 60;
         $scope.showClock = true;
-        console.log($scope.workTime + " " + $scope.breakTime);
-        if (firstTimeRunning === true) {
+        if ($scope.showBreak === false) //hide GET TO WORK !! if and only if showBreak is false
+            $scope.showWork = true;
+        if (firstTimeRunning === true) { //Get initial values
             initialWorkTime = $scope.workTime;
             initialBreakTime = $scope.breakTime;
             firstTimeRunning = false;
         }
+        console.log($scope.workTime + " " + $scope.breakTime);
+        $scope.breakMinutes = initialBreakTime;
         x = setInterval(function() {
             var now = new Date().getTime();
             var distance = countDownTime - now;
-            $scope.workMinutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            $scope.workSeconds = Math.floor((distance % (1000 * 60)) / 1000);
+            $scope.workMinutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); //Calculate minutes
+            $scope.workSeconds = Math.floor((distance % (1000 * 60)) / 1000); //Calculate seconds
             if ($scope.workMinutes <= 0) {
                 $scope.workMinutes = 0;
             }
@@ -66,13 +74,8 @@ app.controller('ClockController', ['$scope', function($scope) {
             }
             if (distance <= 0) {
                 clearInterval(x);
+                $scope.showWork = false;
                 $scope.workTime = initialWorkTime;
-                if (pause === true && $scope.breakTime != 0) {
-                    $scope.breakTime = $scope.breakMinutes + $scope.breakSeconds / 60;
-                    pause = false;
-                } else {
-                    $scope.breakTime = initialBreakTime;
-                }
                 startBreak($scope.breakTime);
             }
             $scope.$apply();
@@ -80,7 +83,8 @@ app.controller('ClockController', ['$scope', function($scope) {
 
         function startBreak(time) {
             var countDownTime = new Date().getTime() + time * 1000 * 60;
-
+            $scope.showBreak = true;
+            $scope.workMinutes = initialWorkTime;
             x = setInterval(function() {
                 var now = new Date().getTime();
                 var distance = countDownTime - now;
@@ -97,8 +101,8 @@ app.controller('ClockController', ['$scope', function($scope) {
                 }
                 if (distance <= 0) {
                     clearInterval(x);
+                    $scope.showBreak = false;
                     $scope.breakTime = initialBreakTime;
-                    $scope.workTime = initialWorkTime;
                     $scope.startWork($scope.workTime);
                 }
                 $scope.$apply();

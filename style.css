@@ -12,3 +12,11 @@ input {
     border-radius: 20px;
     text-align: center;
 }
+
+.showWork {
+    background-color: #FD7C7C;
+}
+
+.showBreak {
+    background-color: #31F988;
+}

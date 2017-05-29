@@ -28,13 +28,13 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-6">
-                <label>Work Time
-                    <input type="number" ng-model="workTime">
+                <label>Work Time:
+                    <input type="number" ng-model="workTime" min="1"> minutes
                 </label>
             </div>
             <div class="col-xs-6">
-                <label>Break Time
-                    <input type="number" ng-model="breakTime">
+                <label>Break Time:
+                    <input type="number" ng-model="breakTime" min="1"> minutes
                 </label>
             </div>
         </div>
@@ -44,6 +44,14 @@
             </div>
             <div class="col-xs-6">
                 <h1 ng-show="showClock">{{breakMinutes + ":" + breakSeconds}}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">
+                <h3 ng-show="showWork" class="showWork">Get to work !!</h1>
+            </div>
+            <div class = "col-xs-offset-4 col-xs-3">
+                <h3 ng-show="showBreak" class="showBreak">Ahhh.... Take a break!</h1>
             </div>
         </div>
     </div>
