@@ -1,6 +1,6 @@
 app.controller('ClockController', ['$scope', function($scope) {
-    var defaultWorkTime = 0.2; //set defaults
-    var defaultBreakTime = 0.2;
+    var defaultWorkTime = 25; //set defaults
+    var defaultBreakTime = 5;
     $scope.workTime = defaultWorkTime; //set to default initially
     $scope.breakTime = defaultBreakTime;
 
