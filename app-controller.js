@@ -57,7 +57,6 @@ app.controller('ClockController', ['$scope', function($scope) {
             firstTimeRunning = false;
         }
         console.log($scope.workTime + " " + $scope.breakTime);
-        $scope.breakMinutes = initialBreakTime;
         x = setInterval(function() {
             var now = new Date().getTime();
             var distance = countDownTime - now;
@@ -84,7 +83,6 @@ app.controller('ClockController', ['$scope', function($scope) {
         function startBreak(time) {
             var countDownTime = new Date().getTime() + time * 1000 * 60;
             $scope.showBreak = true;
-            $scope.workMinutes = initialWorkTime;
             x = setInterval(function() {
                 var now = new Date().getTime();
                 var distance = countDownTime - now;
