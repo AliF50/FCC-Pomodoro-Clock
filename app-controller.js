@@ -1,4 +1,4 @@
-app.controller('ClockController', ['$scope', function($scope) {
+app.controller('ClockController', ['$scope', '$interval', function($scope, $interval) {
     var defaultWorkTime = 25; //set defaults
     var defaultBreakTime = 5;
     $scope.workTime = defaultWorkTime; //set to default initially
@@ -25,11 +25,11 @@ app.controller('ClockController', ['$scope', function($scope) {
         $scope.showClock = false;
         $scope.showWork = false;
         $scope.showBreak = false;
-        clearInterval(x);
+        $interval.cancel(x);
     };
 
     $scope.pause = function() {
-        clearInterval(x);
+        $interval.cancel(x);
         //pause = true;
         var workTimeLeft = $scope.workMinutes + $scope.workSeconds / 60;
         var breakTimeLeft = $scope.breakMinutes + $scope.breakSeconds / 60;
@@ -45,9 +45,9 @@ app.controller('ClockController', ['$scope', function($scope) {
     };
 
     $scope.startWork = function(time) {
-        clearInterval(x); //if user clicks button again, let go of previous timer
+        $interval.cancel(x); //if user clicks button again, let go of previous timer
         var countDownTime = new Date().getTime() +
-            time * 1000 * 60;
+            time * 1000 * 60; //time of now + what user specified
         $scope.showClock = true;
         if ($scope.showBreak === false) //hide GET TO WORK !! if and only if showBreak is false
             $scope.showWork = true;
@@ -57,12 +57,12 @@ app.controller('ClockController', ['$scope', function($scope) {
             firstTimeRunning = false;
         }
         console.log($scope.workTime + " " + $scope.breakTime);
-        x = setInterval(function() {
+        x = $interval(function() {
             var now = new Date().getTime();
             var distance = countDownTime - now;
             $scope.workMinutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); //Calculate minutes
             $scope.workSeconds = Math.floor((distance % (1000 * 60)) / 1000); //Calculate seconds
-            if ($scope.workMinutes <= 0) {
+            if ($scope.workMinutes <= 0) { //take care of -1's
                 $scope.workMinutes = 0;
             }
             if ($scope.workSeconds < 0) {
@@ -71,19 +71,18 @@ app.controller('ClockController', ['$scope', function($scope) {
             if ($scope.workSeconds < 10) { //for seconds from 0-9
                 $scope.workSeconds = "0" + $scope.workSeconds;
             }
-            if (distance <= 0) {
-                clearInterval(x);
+            if (distance <= 0) { //if time is up
+                $interval.cancel(x); //let go of this interval
                 $scope.showWork = false;
-                $scope.workTime = initialWorkTime;
-                startBreak($scope.breakTime);
+                $scope.workTime = initialWorkTime; //reset work time
+                startBreak($scope.breakTime); //call startBreak
             }
-            $scope.$apply();
         }, 1000);
 
         function startBreak(time) {
             var countDownTime = new Date().getTime() + time * 1000 * 60;
             $scope.showBreak = true;
-            x = setInterval(function() {
+            x = $interval(function() {
                 var now = new Date().getTime();
                 var distance = countDownTime - now;
                 $scope.breakMinutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -98,12 +97,11 @@ app.controller('ClockController', ['$scope', function($scope) {
                     $scope.breakSeconds = "0" + $scope.breakSeconds;
                 }
                 if (distance <= 0) {
-                    clearInterval(x);
+                    $interval.cancel(x);
                     $scope.showBreak = false;
-                    $scope.breakTime = initialBreakTime;
-                    $scope.startWork($scope.workTime);
+                    $scope.breakTime = initialBreakTime; //reset break time
+                    $scope.startWork($scope.workTime); //call start work again
                 }
-                $scope.$apply();
             }, 1000);
         }
 
